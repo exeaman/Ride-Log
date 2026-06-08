@@ -15,6 +15,6 @@ A microservices-based bike ride tracking application.
 - Java 17
 - Spring Boot
 - Spring Cloud
-- PostgreSQL
+- PostgresSQL
 - React
 - Docker
