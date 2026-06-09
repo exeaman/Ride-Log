@@ -5,6 +5,7 @@ import com.ridelog.rideservice.auth.user.UserMapper;
 import com.ridelog.rideservice.auth.user.UserRepository;
 import com.ridelog.rideservice.exception.DuplicateResourceException;
 import com.ridelog.rideservice.exception.UnauthorizedException;
+import com.ridelog.rideservice.security.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
+    private final JwtService jwtService;
 
     @Override
     public AuthResponse register(RegisterRequest request) {
@@ -33,8 +35,10 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public AuthResponse login(LoginRequest request) {
-
-        User user = getUserByEmailOrThrow(request.getEmail());
+        String email = request.getEmail()
+                .trim()
+                .toLowerCase();
+        User user = getUserByEmailOrThrow(email);
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new UnauthorizedException("Invalid email or password");
@@ -57,9 +61,8 @@ public class AuthServiceImpl implements AuthService {
     }
 
     private AuthResponse buildAuthResponse(User user) {
-
         return AuthResponse.builder()
-                .token(null) // JWT later
+                .token(jwtService.generateToken(user))
                 .user(userMapper.toResponse(user))
                 .build();
     }
