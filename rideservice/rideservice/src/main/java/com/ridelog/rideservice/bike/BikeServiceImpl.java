@@ -78,7 +78,7 @@ public class BikeServiceImpl implements BikeService {
     public List<BikeResponse> getAllBikesByUser(Long userId) {
         userService.findUserEntityById(userId);
 
-        return bikeRepository.findByUserId(userId).stream().map(bikeMapper::toResponse).toList();
+        return bikeRepository.findByUserIdAndActiveTrue(userId).stream().map(bikeMapper::toResponse).toList();
     }
 
     @Override
@@ -101,13 +101,14 @@ public class BikeServiceImpl implements BikeService {
     @Override
     public void deleteBike(Long bikeId) {
         Bike bike = getBikeOrThrow(bikeId);
+        bike.setActive(false);
 
-        bikeRepository.delete(bike);
+        bikeRepository.save(bike);
     }
 
     private Bike getBikeOrThrow(Long bikeId) {
 
-        return bikeRepository.findById(bikeId).orElseThrow(() -> new ResourceNotFoundException("Bike not found with id: " + bikeId));
+        return bikeRepository.findByIdAndActiveTrue(bikeId).orElseThrow(() -> new ResourceNotFoundException("Bike not found with id: " + bikeId));
     }
 
     private void validateRegistrationNumber(String registrationNumber) {

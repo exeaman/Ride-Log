@@ -14,7 +14,7 @@ public class BikeResponse {
     private Long id;
 
     private String registrationNumber;
-
+    private boolean active;
     private String chassisNumber;
 
     private String brand;

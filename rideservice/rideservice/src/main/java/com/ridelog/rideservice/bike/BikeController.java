@@ -167,7 +167,7 @@ public class BikeController {
                 """
     )
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Bike deleted successfully"),
+            @ApiResponse(responseCode = "200", description = "Bike archived successfully"),
             @ApiResponse(responseCode = "404", description = "Bike not found")
     })
     @DeleteMapping("/{bikeId}")
@@ -175,6 +175,6 @@ public class BikeController {
 
         bikeService.deleteBike(bikeId);
 
-        return ApiResponseDto.success("Bike deleted successfully");
+        return ApiResponseDto.success("Bike archived successfully");
     }
 }

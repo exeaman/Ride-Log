@@ -12,6 +12,7 @@ public class BikeMapper {
                 .registrationNumber(bike.getRegistrationNumber())
                 .chassisNumber(bike.getChassisNumber())
                 .brand(bike.getBrand())
+                .active(bike.isActive())
                 .model(bike.getModel())
                 .year(bike.getYear())
                 .purchaseDate(bike.getPurchaseDate())

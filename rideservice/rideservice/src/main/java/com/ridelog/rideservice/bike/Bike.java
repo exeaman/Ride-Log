@@ -34,7 +34,7 @@ public class Bike {
     private String model;
 
     private Integer year;
-
+    private boolean active = true;
     private LocalDate purchaseDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
