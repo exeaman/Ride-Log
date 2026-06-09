@@ -72,4 +72,5 @@ public class AnalyticsServiceImpl implements AnalyticsService {
 
         return UserAnalyticsResponse.builder().userId(userId).totalBikes((long) bikes.size()).totalRides(totalRides).totalDistance(totalDistance).averageRideDistance(averageRideDistance).longestRide(longestRide).firstRideDate(firstRideDate).latestRideDate(latestRideDate).build();
     }
+
 }

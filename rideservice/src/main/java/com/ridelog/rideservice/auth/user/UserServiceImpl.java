@@ -3,6 +3,8 @@ package com.ridelog.rideservice.auth.user;
 import com.ridelog.rideservice.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 @Service
 @RequiredArgsConstructor
@@ -48,5 +50,18 @@ public class UserServiceImpl implements UserService {
                         new ResourceNotFoundException(
                                 "User not found with id: " + userId
                         ));
+    }
+    @Override
+    public User getCurrentUser() {
+
+        Authentication authentication =
+                SecurityContextHolder
+                        .getContext()
+                        .getAuthentication();
+
+        String email =
+                authentication.getName();
+
+        return findUserEntityByEmail(email);
     }
 }

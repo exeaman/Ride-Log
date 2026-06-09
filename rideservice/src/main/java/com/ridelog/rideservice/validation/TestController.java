@@ -2,6 +2,7 @@ package com.ridelog.rideservice.validation;
 
 import com.ridelog.rideservice.auth.user.User;
 import com.ridelog.rideservice.auth.user.UserRepository;
+import com.ridelog.rideservice.auth.user.UserService;
 import com.ridelog.rideservice.security.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class TestController {
     private final UserRepository userRepository;
     private final JwtService jwtService;
+    private final UserService userService;
     @GetMapping("/test")
     public String test() {
         return "Ride Service Working";
@@ -30,4 +32,11 @@ public class TestController {
 
         return jwtService.generateToken(user);
     }*/
+    @GetMapping("/me")
+    public String me() {
+
+        return userService
+                .getCurrentUser()
+                .getEmail();
+    }
 }

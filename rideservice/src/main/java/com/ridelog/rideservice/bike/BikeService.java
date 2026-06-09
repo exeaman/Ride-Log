@@ -9,8 +9,11 @@ public interface BikeService {
     BikeResponse getBikeById(Long bikeId);
 
     List<BikeResponse> getAllBikesByUser(Long userId);
-
+    List<BikeResponse> getMyBikes();
     BikeResponse updateBike(Long bikeId, UpdateBikeRequest request);
 
     void deleteBike(Long bikeId);
+    BikeResponse createBike(
+            CreateBikeRequest request
+    );
 }

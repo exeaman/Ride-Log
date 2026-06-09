@@ -1,9 +1,12 @@
 package com.ridelog.rideservice.ride;
 
+import com.ridelog.rideservice.auth.user.User;
+import com.ridelog.rideservice.auth.user.UserService;
 import com.ridelog.rideservice.bike.Bike;
 import com.ridelog.rideservice.bike.BikeService;
 import com.ridelog.rideservice.exception.InvalidRideException;
 import com.ridelog.rideservice.exception.ResourceNotFoundException;
+import com.ridelog.rideservice.exception.UnauthorizedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,19 +20,23 @@ public class RideServiceImpl implements RideService {
     private final RideRepository rideRepository;
     private final RideMapper rideMapper;
     private final BikeService bikeService;
+    private final UserService userService;
 
     @Override
     public RideResponse createRide(CreateRideRequest request) {
 
-        Bike bike = bikeService.findBikeEntityById(request.getBikeId());
+        Bike bike = getOwnedBikeOrThrow(request.getBikeId());
 
         validateRide(bike, request.getRideDate(), request.getStartOdometer(), request.getEndOdometer());
 
         Ride ride = rideMapper.toEntity(request);
 
-        ride.setBike(bike);
-
-        ride.setDistance(request.getEndOdometer() - request.getStartOdometer());
+        populateRideFields(
+                ride,
+                bike,
+                request.getStartOdometer(),
+                request.getEndOdometer()
+        );
 
         Ride savedRide = rideRepository.save(ride);
 
@@ -45,7 +52,7 @@ public class RideServiceImpl implements RideService {
     @Override
     public List<RideResponse> getAllRidesByBike(Long bikeId) {
 
-        bikeService.findBikeEntityById(bikeId);
+        getOwnedBikeOrThrow(bikeId);
 
         return rideRepository.findByBikeId(bikeId).stream().map(rideMapper::toResponse).toList();
     }
@@ -61,11 +68,12 @@ public class RideServiceImpl implements RideService {
 
         ride.setRideDate(request.getRideDate());
 
-        ride.setStartOdometer(request.getStartOdometer());
-
-        ride.setEndOdometer(request.getEndOdometer());
-
-        ride.setDistance(request.getEndOdometer() - request.getStartOdometer());
+        populateRideFields(
+                ride,
+                ride.getBike(),
+                request.getStartOdometer(),
+                request.getEndOdometer()
+        );
 
         ride.setNotes(request.getNotes());
 
@@ -103,5 +111,41 @@ public class RideServiceImpl implements RideService {
 
             throw new InvalidRideException("Ride date cannot be in the future");
         }
+    }
+    private void populateRideFields(
+            Ride ride,
+            Bike bike,
+            Long startOdometer,
+            Long endOdometer
+    ) {
+
+        ride.setBike(bike);
+
+        ride.setStartOdometer(startOdometer);
+
+        ride.setEndOdometer(endOdometer);
+
+        ride.setDistance(
+                endOdometer - startOdometer
+        );
+    }
+    private Bike getOwnedBikeOrThrow(Long bikeId) {
+
+        Bike bike =
+                bikeService.findBikeEntityById(bikeId);
+
+        User currentUser =
+                userService.getCurrentUser();
+
+        if (!bike.getUser()
+                .getId()
+                .equals(currentUser.getId())) {
+
+            throw new UnauthorizedException(
+                    "Access denied"
+            );
+        }
+
+        return bike;
     }
 }
