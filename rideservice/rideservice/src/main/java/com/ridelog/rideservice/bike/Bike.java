@@ -34,6 +34,7 @@ public class Bike {
     private String model;
 
     private Integer year;
+    @Builder.Default
     private boolean active = true;
     private LocalDate purchaseDate;
 

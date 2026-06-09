@@ -9,15 +9,15 @@
         <module name="apigateway" />
         <module name="servicediscovery" />
       </profile>
-      <profile name="Annotation profile for rideservice" enabled="true">
+      <profile name="Annotation profile for analyticsservice" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.46/lombok-1.18.46.jar" />
         </processorPath>
-        <module name="rideservice" />
         <module name="analyticsservice" />
+        <module name="rideservice" />
       </profile>
     </annotationProcessing>
   </component>
