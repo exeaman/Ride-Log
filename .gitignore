@@ -1,1 +1,40 @@
-.idea
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# Maven
+target/
+
+# Logs
+*.log
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Environment files
+.env
+
+# Application secrets
+application-local.properties
+application-prod.properties
+
+# Build output
+out/
+
+# VS Code
+.vscode/
+
+# Eclipse
+.project
+.classpath
+.settings/
+
+# NetBeans
+nbproject/private/
+
+# Java
+*.class
+
+# Generated files
+dependency-reduced-pom.xml
