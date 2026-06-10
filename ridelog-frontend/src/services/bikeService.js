@@ -11,3 +11,8 @@ export const createBike = async (bikeData) => {
 
   return response.data;
 };
+export const deleteBike = async (bikeId) => {
+  const response = await axiosClient.delete(`/bikes/${bikeId}`);
+
+  return response.data;
+};

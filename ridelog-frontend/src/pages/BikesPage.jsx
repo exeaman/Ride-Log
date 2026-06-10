@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-import { getMyBikes } from "../services/bikeService";
+import { getMyBikes, deleteBike } from "../services/bikeService";
 
 function BikesPage() {
   const [bikes, setBikes] = useState([]);
   const loadBikes = async () => {
     try {
       const response = await getMyBikes();
-
+  
       setBikes(response.data);
     } catch (error) {
       console.error(error);
@@ -18,6 +18,25 @@ function BikesPage() {
   useEffect(() => {
     loadBikes();
   }, []);
+
+
+  const handleDelete = async (bikeId) => {
+    const confirmed = window.confirm("Delete this bike?");
+
+    if (!confirmed) {
+      return;
+    }
+
+    try {
+      await deleteBike(bikeId);
+
+      loadBikes();
+    } catch (error) {
+      console.error(error);
+
+      alert(error.response?.data?.message || "Failed to delete bike");
+    }
+  };
 
   return (
     <div>
@@ -30,6 +49,10 @@ function BikesPage() {
 
             <p>{bike.model}</p>
           </Link>
+
+          <button onClick={() => handleDelete(bike.id)}>Delete</button>
+
+          <hr />
         </div>
       ))}
     </div>
