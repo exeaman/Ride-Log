@@ -63,7 +63,16 @@ public class BikeController {
                 bikeService.updateBike(bikeId, request)
         );
     }
+    @GetMapping("/{bikeId}")
+    public ApiResponseDto<BikeResponse> getBikeById(
+            @PathVariable Long bikeId
+    ) {
 
+        return ApiResponseDto.success(
+                "Bike fetched successfully",
+                bikeService.getBikeById(bikeId)
+        );
+    }
     @DeleteMapping("/{bikeId}")
     public ApiResponseDto<Void> deleteBike(
             @PathVariable Long bikeId

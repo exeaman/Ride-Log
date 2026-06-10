@@ -11,17 +11,17 @@ import java.util.List;
 @FeignClient(name = "RIDESERVICE")
 public interface RideServiceClient {
 
-    @GetMapping("/bikes/{bikeId}")
+    @GetMapping("/internal/bikes/{bikeId}")
     ApiResponseDto<BikeResponse> getBikeById(
             @PathVariable Long bikeId
     );
 
-    @GetMapping("/bikes/user/{userId}")
+    @GetMapping("/internal/bikes/user/{userId}")
     ApiResponseDto<List<BikeResponse>> getBikesByUser(
             @PathVariable Long userId
     );
 
-    @GetMapping("/rides/bike/{bikeId}")
+    @GetMapping("/internal/rides/bike/{bikeId}")
     ApiResponseDto<List<RideResponse>> getRidesByBike(
             @PathVariable Long bikeId
     );

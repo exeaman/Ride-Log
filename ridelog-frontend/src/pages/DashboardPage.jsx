@@ -1,18 +1,30 @@
+import { Link } from "react-router-dom";
+
+import { useAuth } from "../context/AuthContext";
+
 function DashboardPage() {
+  const { user, logout } = useAuth();
 
-    const token =
-        localStorage.getItem("token");
+  return (
+    <div>
+      <h1>Welcome {user?.name}</h1>
 
-    return (
-        <div>
-            <h1>Dashboard</h1>
+      <p>{user?.email}</p>
 
-            <p>
-                Logged In:
-                {token ? " Yes" : " No"}
-            </p>
-        </div>
-    );
+      <br />
+
+      <Link to="/bikes">My Bikes</Link>
+
+      <br />
+
+      <Link to="/bikes/new">Add Bike</Link>
+
+      <br />
+      <br />
+
+      <button onClick={logout}>Logout</button>
+    </div>
+  );
 }
 
 export default DashboardPage;

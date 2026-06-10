@@ -25,4 +25,7 @@ public interface RideService {
     void deleteRide(
             Long rideId
     );
+    List<RideResponse> getAllRidesByBikeInternal(
+            Long bikeId
+    );
 }

@@ -48,7 +48,22 @@ public class RideServiceImpl implements RideService {
 
         return rideMapper.toResponse(getRideOrThrow(rideId));
     }
+    @Override
+    public List<RideResponse> getAllRidesByBikeInternal(
+            Long bikeId
+    ) {
 
+        bikeService.findBikeEntityById(
+                bikeId
+        );
+
+        return rideRepository.findByBikeId(
+                        bikeId
+                )
+                .stream()
+                .map(rideMapper::toResponse)
+                .toList();
+    }
     @Override
     public List<RideResponse> getAllRidesByBike(Long bikeId) {
 

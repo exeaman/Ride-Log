@@ -1,78 +1,61 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 import { login } from "../services/authService";
+import { useAuth } from "../context/AuthContext";
 
 function LoginPage() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
-    const navigate = useNavigate();
+  const { login: loginUser } = useAuth();
 
-    const handleLogin = async () => {
+  const handleLogin = async () => {
+    try {
+      const response = await login({
+        email,
+        password,
+      });
 
-        try {
+      console.log(response);
 
-            const response = await login({
-                email,
-                password
-            });
+      loginUser(response.data.token, response.data.user);
 
-            console.log(response);
+      navigate("/dashboard");
+    } catch (error) {
+      console.error(error);
 
-            localStorage.setItem(
-                "token",
-                response.data.token
-            );
+      alert(error.response?.data?.message || "Login failed");
+    }
+  };
 
-            navigate("/dashboard");
+  return (
+    <div>
+      <h1>RideLog Login</h1>
 
-        } catch (error) {
+      <input
+        type="email"
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
 
-            console.error(error);
+      <br />
 
-            alert(
-                error.response?.data?.message ||
-                "Login failed"
-            );
-        }
-    };
+      <input
+        type="password"
+        placeholder="Password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
 
-    return (
-        <div>
+      <br />
 
-            <h1>RideLog Login</h1>
-
-            <input
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={(e) =>
-                    setEmail(e.target.value)
-                }
-            />
-
-            <br />
-
-            <input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) =>
-                    setPassword(e.target.value)
-                }
-            />
-
-            <br />
-
-            <button
-                onClick={handleLogin}
-            >
-                Login
-            </button>
-
-        </div>
-    );
+      <button onClick={handleLogin}>Login</button>
+    </div>
+  );
 }
 
 export default LoginPage;
