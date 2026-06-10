@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-
+import { useNavigate, Link } from "react-router-dom";
+import toast from "react-hot-toast";
 import { login } from "../services/authService";
 import { useAuth } from "../context/AuthContext";
 
 function LoginPage() {
   const [email, setEmail] = useState("");
+
   const [password, setPassword] = useState("");
 
   const navigate = useNavigate();
@@ -19,41 +20,124 @@ function LoginPage() {
         password,
       });
 
-      console.log(response);
-
       loginUser(response.data.token, response.data.user);
 
       navigate("/dashboard");
     } catch (error) {
       console.error(error);
 
-      alert(error.response?.data?.message || "Login failed");
+      toast.error(error.response?.data?.message || "Login failed.");
     }
   };
 
   return (
-    <div>
-      <h1>RideLog Login</h1>
+    <div
+      className="
+      min-h-screen
+      bg-[#F6F4EF]
+      flex
+      items-center
+      justify-center
+      px-6
+      "
+    >
+      <div
+        className="
+        w-full
+        max-w-md
+        bg-white
+        rounded-3xl
+        p-10
+        border
+        border-[#E8E1D7]
+        shadow-sm
+        "
+      >
+        <h1
+          className="
+          text-5xl
+          mb-3
+          text-center
+          "
+          style={{
+            fontFamily: "Playfair Display",
+          }}
+        >
+          RideLog
+        </h1>
 
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
+        <p
+          className="
+          text-center
+          text-[#6B6762]
+          mb-10
+          "
+        >
+          Welcome back
+        </p>
 
-      <br />
+        <div className="space-y-5">
+          <input
+            className="
+            w-full
+            p-4
+            rounded-2xl
+            border
+            border-[#E8E1D7]
+            "
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
 
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
+          <input
+            className="
+            w-full
+            p-4
+            rounded-2xl
+            border
+            border-[#E8E1D7]
+            "
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
 
-      <br />
+          <button
+            onClick={handleLogin}
+            className="
+            w-full
+            p-4
+            rounded-full
+            bg-[#CBB99A]
+            text-white
+            "
+          >
+            Login
+          </button>
+        </div>
 
-      <button onClick={handleLogin}>Login</button>
+        <p
+          className="
+          text-center
+          mt-8
+          text-[#6B6762]
+          "
+        >
+          New here?{" "}
+          <Link
+            to="/register"
+            className="
+            text-[#2E2A26]
+            font-medium
+            "
+          >
+            Create account
+          </Link>
+        </p>
+      </div>
     </div>
   );
 }
