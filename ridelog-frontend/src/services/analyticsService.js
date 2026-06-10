@@ -5,3 +5,9 @@ export const getBikeAnalytics = async (bikeId) => {
 
   return response.data;
 };
+
+export const getUserAnalytics = async (userId) => {
+  const response = await axiosClient.get(`/analytics/user/${userId}`);
+
+  return response.data;
+};
