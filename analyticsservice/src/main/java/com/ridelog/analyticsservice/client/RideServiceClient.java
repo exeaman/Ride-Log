@@ -8,7 +8,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@FeignClient(name = "RIDESERVICE")
+@FeignClient(
+        name = "ride-service",
+        url = "${ride.service.url}"
+)
 public interface RideServiceClient {
 
     @GetMapping("/internal/bikes/{bikeId}")
